@@ -56,8 +56,29 @@ module.exports = () => {
     ],
 
     module: {
+      // Set of instructions telling Webpack how to process different types of files
       rules: [
-        
+        {
+          // Handling CSS
+          test: /\.css$/i,
+          use: ["style-loader", "css-loader"],
+        },
+        {
+          test: /\.m?js$/,
+          exclude: /node_modules/,
+          /* Handling modern Javascript (ES6+) - 
+          transpiling into a version that's compatible with older browsers */
+          use: {
+            loader: "babel-loader",
+            options: {
+              presets: ["@babel/preset-env"],
+              plugins: [
+                "@babel/plugin-proposal-object-rest-spread",
+                "@babel/transform-runtime",
+              ],
+            },
+          },
+        },
       ],
     },
   };
