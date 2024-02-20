@@ -18,7 +18,41 @@ module.exports = () => {
       path: path.resolve(__dirname, 'dist'),
     },
     plugins: [
-      
+      /* Automates generation of HTML file 
+      everytime bundled Javascript code changes */
+      new HtmlWebpackPlugin({
+        template: './index.html',
+        title: 'JATE'
+      }),
+      /* For generating a pre-cache manifest - allowing service worker to intercept and serve 
+      those cached resources for offline capabilities */
+      new InjectManifest({
+        swSrc: './src-sw.js',
+        swDest: 'src-sw.js'
+      }),
+      /* Simplifying & automating the creation and management
+      of the web app manifest (manifest.json) file within the context of our Webpack build process */
+      new WebpackPwaManifest({
+        fingerprints: false,
+        inject: true,
+        name: 'Just Another Text Editor',
+        short_name: 'J.A.T.E.',
+        description: 'Keep track of your Todos! Take notes with JavaScript syntax highlighting!',
+        background_color: '#225ca3',
+        theme_color: '#225ca3',
+        start_url: '/',
+        publicPath: '/',
+        /* The most vital part for an 'app-like' feel for 
+        PWAs - the generation of an icon in multiple sizes
+         for different devices */
+        icons: [
+          {
+            src: path.resolve('src/images/logo.png'),
+            sizes: [96, 128, 192, 256, 384, 512],
+            destination: path.join('assets', 'icons')
+          }
+        ]
+      })
     ],
 
     module: {
